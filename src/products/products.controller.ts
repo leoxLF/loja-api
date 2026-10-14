@@ -1,25 +1,30 @@
 import { Controller, Get, Post, Body, Param, NotFoundException, Put, Delete, HttpCode } from '@nestjs/common';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductDto } from './dto/product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
 
-    private products: any[] = [];
+    private products: ProductDto[] = [];
     private nextId: number = 1;
 
+    
      @Post()
-    create(@Body() product: any){
-        product.id = this.nextId++;
+    create(@Body() createProduct: CreateProductDto): ProductDto {
+        const{ name, price, stock } = createProduct;
+        const product: ProductDto = { id: this.nextId++, name, price, stock };
         this.products.push(product);
         return product;
     }
 
-   
-    @Get() 
-    findAll(){
+   @Get()
+    findAll(): ProductDto[] {
         return this.products;
-    } 
+    }
+
      @Get(':id')
-    findById(@Param('id') id: number){
+    findById(@Param('id') id: number): ProductDto {
         console.log('ID recebido:', id);
         const product = this.products.find(produto => produto.id == id);
         if(!product){
@@ -30,7 +35,7 @@ export class ProductsController {
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() updateProduct: any){
+    update(@Param('id') id: number, @Body() updateProduct: UpdateProductDto): ProductDto {
         const product = this.products.find(produto => produto.id == id);
         if(!product){
             throw new NotFoundException('produto com o id ' + id + ' não encontrado');
