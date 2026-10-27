@@ -10,29 +10,29 @@ export class ProductsController {
 
     
      @Post()
-    create(@Body() createProduct: CreateProductDto): ProductDto {
+    create(@Body() createProduct: CreateProductDto): Promise<ProductDto> {
         return this.productService.create(createProduct);
     }
 
    @Get()
-    async findAll(): ProductDto[] {
-        return await this.productService.findAll();
+    findAll(): Promise<ProductDto[]> {
+        return this.productService.findAll();
     }
 
      @Get(':id')
-    findById(@Param('id') id: number): ProductDto {
-      return this.productService.findById(id);  
+    findById(@Param('id') id: number): Promise<ProductDto> {
+      return  this.productService.findById(id);  
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() updateProduct: UpdateProductDto): ProductDto {
+    update(@Param('id') id: number, @Body() updateProduct: UpdateProductDto): Promise<ProductDto> {
        return this.productService.update(id, updateProduct);
     }
 
     @Delete(':id')
     @HttpCode(204)
-    delete(@Param('id') id: number){ 
-       this.productService.delete(id);
+    delete(@Param('id') id: number): Promise<void>  { 
+       return this.productService.delete(id);
     }
 
 }
