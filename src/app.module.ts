@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import ProductService  from './products/product.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Product } from './products/product.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_DATABASE'),
-        autoLoadEntities: true,
+        entities: [Product],
         synchronize: true, // cuidado com isso em produção
       }),
     }),
