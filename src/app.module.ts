@@ -22,7 +22,7 @@ import { Product } from './products/product.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_DATABASE'),
-        entities: [Product],
+        autoLoadEntities: true,
         synchronize: true, // cuidado com isso em produção
       }),
     }),

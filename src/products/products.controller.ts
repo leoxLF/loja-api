@@ -15,8 +15,8 @@ export class ProductsController {
     }
 
    @Get()
-    findAll(): ProductDto[] {
-        return this.productService.findAll();
+    async findAll(): ProductDto[] {
+        return await this.productService.findAll();
     }
 
      @Get(':id')
