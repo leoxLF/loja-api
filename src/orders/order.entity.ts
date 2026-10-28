@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { OrderItem } from "./order-item.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export type OrderStatus = 'OPEN' | 'PAID' | 'CANCELLED'
 
@@ -19,4 +18,22 @@ export class Order{
 
     @OneToMany(() => OrderItem, (item) => item.order, {cascade: true, eager: true})
     items: OrderItem[];
+}
+
+@Entity('order_items')
+export class OrderItem{
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({type: 'int'})
+    productId: number;
+
+    @Column({type: 'int'})
+    quantity: number;
+
+    @Column({type: 'numeric', precision: 10, scale: 2})
+    unitPrice: number;
+
+    @ManyToOne(() => Order, (order) => order.items)
+    order: Order;
 }
