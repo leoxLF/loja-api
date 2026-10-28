@@ -8,7 +8,7 @@ export class Order{
     id: number;
 
     @Column({type: 'int'})
-    userId: number;
+    userId: number | null;
 
     @Column({type: 'varchar', length: 20, default: 'OPEN'})
     status: OrderStatus;

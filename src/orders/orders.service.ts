@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { Order } from './order.entity';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Order, OrderItem } from './order.entity';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateOrderDto } from './create-order.dto';
+import { Product } from '../products/product.entity';
 
 @Injectable()
 export class OrdersService {
@@ -10,6 +11,7 @@ export class OrdersService {
     constructor(
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
+        private readonly dataSource: DataSource
     ) {}
 
     async create(dto: CreateOrderDto, userId: number | null = null): Promise<Order> {
@@ -22,6 +24,27 @@ export class OrdersService {
         // - se não existe, retorna 400
         // - se tiver tudo ok, decrementa do estoque e salva a order como OPEN 
         
-        return
+        return this.dataSource.transaction(async (manager) => {
 
+            const order = manager.create(Order, {userId, status: 'OPEN', items: []});
+
+            for (const itemDto of dto.items) {
+                const product = await manager.findOne(Product, {where: {id: itemDto.productId}}); 
+                if (!product) throw new NotFoundException(`Produto ${itemDto.productId} não encontrado`);
+
+                if (itemDto.quantity > product.stock) throw new BadRequestException(`Estoque insuficiente para o produto ${itemDto.productId}. Quantidade em estoque: ${product.stock}`);
+
+                await manager.decrement(Product, {id: product.id}, 'stock', itemDto.quantity);
+
+                const item = manager.create(OrderItem, {
+                    productId: product.id,
+                    quantity: itemDto.quantity,
+                    unitPrice: product.price
+                });
+                order.items.push(item);
+            }
+            return manager.save(order);
+        });
+
+}
 }
