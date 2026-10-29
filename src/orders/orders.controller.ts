@@ -22,5 +22,10 @@ export class OrdersController {
     @Get(':id') 
     findOne(@Param('id', ParseIntPipe) id: number){
         return this.orderService.findOne(id);
-    }       
+    }   
+    
+    @Post(':id/cancel') 
+    cancel(@Param('id', ParseIntPipe) id: number){
+        return this.orderService.cancel(id);
+    }
 }

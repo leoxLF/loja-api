@@ -28,14 +28,7 @@ export class OrdersService {
 
 
     async create(dto: CreateOrderDto, userId: number | null = null): Promise<Order> {
-        // criar uma order para salvar
 
-        // para cada item do dto,
-        // - validar se o produto existe
-        // - se não existe, retorna 404
-        // - verificar se éxiste quantidade em estoque
-        // - se não existe, retorna 400
-        // - se tiver tudo ok, decrementa do estoque e salva a order como OPEN 
         
         return this.dataSource.transaction(async (manager) => {
 
@@ -60,4 +53,18 @@ export class OrdersService {
         });
 
 }
+    async cancel(id: number) {
+
+        return this.dataSource.manager.transaction(async (manager) => {
+            const order = await manager.findOne(Order, {where: {id}});
+            if (!order) throw new NotFoundException(`Pedido ${id} não encontrado`);
+            if (order.status !== 'OPEN') throw new BadRequestException(`Só pedidos OPEN podem ser cancelados. Status atual: ${order.status}`);
+            for (const item of order.items) {
+                await manager.increment(Product, {id: item.productId}, 'stock', item.quantity);
+            }
+
+            order.status = 'CANCELLED';
+            return manager.save(order);
+        })
+    }
 }
