@@ -4,6 +4,7 @@ import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import ProductService from './product.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles.decorator';
 @Controller('products')
 export class ProductsController {
 
@@ -35,6 +36,7 @@ export class ProductsController {
     @Delete(':id')
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
+    @Roles('ADMIN'  )
     delete(@Param('id') id: number): Promise<void>  { 
        return this.productService.delete(id);
     }
