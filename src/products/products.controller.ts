@@ -5,14 +5,16 @@ import { CreateProductDto } from './dto/create-product.dto';
 import ProductService from './product.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 @Controller('products')
 export class ProductsController {
 
     constructor(private readonly productService: ProductService) {}
 
     
-     @Post()
-     @UseGuards(JwtAuthGuard)
+    @Post()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN')
     create(@Body() createProduct: CreateProductDto): Promise<ProductDto> {
         return this.productService.create(createProduct);
     }
@@ -35,8 +37,8 @@ export class ProductsController {
 
     @Delete(':id')
     @HttpCode(204)
-    @UseGuards(JwtAuthGuard)
-    @Roles('ADMIN'  )
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN')
     delete(@Param('id') id: number): Promise<void>  { 
        return this.productService.delete(id);
     }
