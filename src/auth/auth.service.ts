@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -24,6 +24,15 @@ export class AuthService {
         const saved_user = await this.userRepository.save(user);
        const { password: _, ...user_without_password } = saved_user;
        return user_without_password;
+    }
+
+    async login(username: string, password: string){
+        const user = await this.userRepository.findOne({where: {username}});
+        if(!user || !(await bcrypt.compare(password, user.password))) throw new UnauthorizedException('credenciais inválidas');
+        const payload = { sub: user.id, username: user.username, role: user.role};
+        return{
+            access_token: await this.jwtService.signAsync(payload)
+        }
     }
 
 }
