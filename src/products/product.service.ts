@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import path from 'path/win32';
@@ -15,7 +15,14 @@ export default class ProductService {
         private readonly productRepository: Repository<Product>
     ) { }
 
-    async findAll(): Promise<Product[]> {
+    async findAll(q?: string): Promise<Product[]> {
+        if (q) {
+            return this.productRepository.find({
+                where: {
+                    name: ILike(`%${q}%`)
+                }
+            });
+        }
         return this.productRepository.find();
     }
 
@@ -37,6 +44,8 @@ export default class ProductService {
 
         return this.productRepository.save(product);
     }
+
+    
 
     async delete(id: number): Promise<void> {
 

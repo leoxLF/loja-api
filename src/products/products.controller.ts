@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, NotFoundException, Put, Delete, HttpCode, UseGuards, UploadedFile, ParseIntPipe, BadRequestException, UseInterceptors, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException, Put, Delete, HttpCode, UseGuards, UploadedFile, ParseIntPipe, BadRequestException, UseInterceptors, Res, Query } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -31,8 +31,8 @@ export class ProductsController {
     }
 
    @Get()
-    findAll(): Promise<ProductDto[]> {
-        return this.productService.findAll();
+    findAll(@Query('q')q?: string): Promise<ProductDto[]> {
+        return this.productService.findAll(q);
     }
 
      @Get(':id')
