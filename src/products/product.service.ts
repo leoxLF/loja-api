@@ -6,6 +6,7 @@ import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import path from 'path/win32';
 import * as fs from 'fs/promises';
+import { PatchProductDto } from './dto/patch-product.dto';
 
 @Injectable()
 export default class ProductService {
@@ -45,7 +46,18 @@ export default class ProductService {
         return this.productRepository.save(product);
     }
 
-    
+    async updatePartial(id: number, patchProduct: PatchProductDto): Promise<Product> {
+
+        const product = await this.productRepository.findOne({ where: { id } });
+
+        if (!product) {
+            throw new NotFoundException('produto com o id ' + id + ' não encontrado');
+        }
+
+        Object.assign(product, patchProduct);
+
+        return this.productRepository.save(product);
+    }
 
     async delete(id: number): Promise<void> {
 
@@ -70,7 +82,7 @@ export default class ProductService {
 
             }
         }
-        
+
         const result = await this.productRepository.delete(id);
         if (!result.affected) throw new NotFoundException('produto com o id ' + id + ' não encontrado');
 
