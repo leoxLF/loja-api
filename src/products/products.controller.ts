@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, NotFoundException, Put, Delete, HttpCode, UseGuards, UploadedFile, ParseIntPipe, BadRequestException, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException, Put, Delete, HttpCode, UseGuards, UploadedFile, ParseIntPipe, BadRequestException, UseInterceptors, Res } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductDto } from './dto/product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -9,6 +9,9 @@ import { RolesGuard } from '../auth/roles.guard';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+import { createReadStream, existsSync } from 'fs';
+import type { Response } from 'express';
 @Controller('products')
 export class ProductsController {
 
@@ -77,6 +80,15 @@ export class ProductsController {
     if (!file) throw new BadRequestException('Envie o campo file jpeg/png/webp');
     await this.productService.updateImageFilename(id, file.filename);
     return { productId: id, imageUrl: `/products/${id}/image`}
+    }
+
+    @Get(':id/image')
+    async getImage(@Param('id', ParseIntPipe) id: number, @Res() res: Response){
+        const product = await this.productService.findById(id);
+        if (!product || !product.imageFilename) throw new NotFoundException('Imagem não encontrada.');
+        const path = join(process.cwd(), 'uploads', product.imageFilename);
+        if(!existsSync(path)) throw new NotFoundException('Imagem não encontrada.');
+        createReadStream(path).pipe(res);
         
     }
 }
