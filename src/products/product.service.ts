@@ -49,4 +49,10 @@ export default class ProductService {
             return this.productRepository.save(product);
         }
 
-}
+    async updateImageFilename(id: number, filename: string) {
+        const product = await this.productRepository.findOne({ where: { id } });
+        if (!product) throw new NotFoundException('produto com o id ' + id + ' não encontrado'); 
+        product.imageFilename = filename;
+        return this.productRepository.save(product);
+    }
+    }
