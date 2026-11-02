@@ -3,35 +3,38 @@ import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGenerate
 export type OrderStatus = 'OPEN' | 'PAID' | 'CANCELLED'
 
 @Entity('orders')
-export class Order{
+export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: 'int'})
+    @Column({ type: 'int' })
     userId: number | null;
 
-    @Column({type: 'varchar', length: 20, default: 'OPEN'})
+    @Column({ type: 'int', nullable: true })
+    addressId: number | null;
+
+    @Column({ type: 'varchar', length: 20, default: 'OPEN' })
     status: OrderStatus;
 
     @CreateDateColumn()
     createdAt: Date;
 
-    @OneToMany(() => OrderItem, (item) => item.order, {cascade: true, eager: true})
+    @OneToMany(() => OrderItem, (item) => item.order, { cascade: true, eager: true })
     items: OrderItem[];
 }
 
 @Entity('order_items')
-export class OrderItem{
+export class OrderItem {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type: 'int'})
+    @Column({ type: 'int' })
     productId: number;
 
-    @Column({type: 'int'})
+    @Column({ type: 'int' })
     quantity: number;
 
-    @Column({type: 'numeric', precision: 10, scale: 2})
+    @Column({ type: 'numeric', precision: 10, scale: 2 })
     unitPrice: number;
 
     @ManyToOne(() => Order, (order) => order.items)
