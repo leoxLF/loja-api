@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Order } from "../orders/order.entity";
 
 export type Role = 'ADMIN' | 'CLIENT';
 
@@ -18,4 +19,5 @@ export class User {
 
     @Column({default: 'CLIENT'})
     role: Role;
+
 }

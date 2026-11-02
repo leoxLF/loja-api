@@ -14,6 +14,8 @@ import { createReadStream, existsSync } from 'fs';
 import type { Response } from 'express';
 import { PatchProductDto } from './dto/patch-product.dto';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
+
+
 @Controller('products')
 export class ProductsController {
 
