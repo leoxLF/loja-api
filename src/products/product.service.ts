@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ILike, Repository } from 'typeorm';
+import { Between, ILike, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import path from 'path/win32';
 import * as fs from 'fs/promises';
 import { PatchProductDto } from './dto/patch-product.dto';
+import { ListProductsQueryDto } from './dto/list-products-query.dto';
 
 @Injectable()
 export default class ProductService {
@@ -16,15 +17,22 @@ export default class ProductService {
         private readonly productRepository: Repository<Product>
     ) { }
 
-    async findAll(q?: string): Promise<Product[]> {
-        if (q) {
-            return this.productRepository.find({
-                where: {
-                    name: ILike(`%${q}%`)
-                }
-            });
+    async findAll(query: ListProductsQueryDto): Promise<Product[]> {
+        const where: any = {};
+
+        if (query.q) {
+            where.name = ILike(`%${query.q}%`);
         }
-        return this.productRepository.find();
+
+        if (query.minPrice !== undefined && query.maxPrice !== undefined) {
+            where.price = Between(query.minPrice, query.maxPrice);
+        } else if (query.minPrice !== undefined) {
+            where.price = MoreThanOrEqual(query.minPrice);
+        } else if (query.maxPrice !== undefined) {
+            where.price = LessThanOrEqual(query.maxPrice);
+        }
+
+        return this.productRepository.find({ where });
     }
 
     async findById(id: number): Promise<Product> {
@@ -76,7 +84,7 @@ export default class ProductService {
             try {
                 await fs.unlink(imagePath);
             } catch (error) {
-                if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+                if ((error as NodeJS.ErrnoException).code !== 'Arquivo não encontrado') {
                     throw error;
                 }
 
