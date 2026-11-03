@@ -1,114 +1,535 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Loja API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gerenciamento de uma loja virtual, desenvolvida com NestJS, TypeORM e PostgreSQL. O projeto possui funcionalidades de gerenciamento de produtos, pedidos, usuários, endereços, pagamentos e categorias.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto foi desenvolvido como atividade acadêmica, contemplando os pacotes **Endereços**, **Pagamento fake** e **Categorias (Catálogo rico)**, com autenticação, controle de acesso, regras de negócio e documentação Swagger.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 1. Tecnologias utilizadas
 
-## Project setup
+- **Node.js** — ambiente de execução.
+- **NestJS** — framework para desenvolvimento da API.
+- **TypeScript** — linguagem de programação.
+- **TypeORM** — ORM para comunicação com o banco de dados.
+- **PostgreSQL** — banco de dados relacional.
+- **JWT** — autenticação dos usuários.
+- **class-validator** — validação dos dados recebidos.
+- **Swagger** — documentação e testes das rotas.
+- **Postman** — ferramenta utilizada para testar as requisições.
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## 2. Instalação e execução
+
+### Pré-requisitos
+
+- Node.js instalado.
+- PostgreSQL instalado e em execução.
+- npm instalado.
+
+### Clonar o repositório
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/leoxLF/loja-api.git
 ```
 
-## Run tests
+Acessar a pasta:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cd loja-api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Instalar as dependências:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Configuração do banco de dados
 
-## Observability
+Crie um banco de dados PostgreSQL e configure as variáveis de ambiente no arquivo `.env`.
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+Exemplo:
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=loja
+DB_PASSWORD=sua_senha
+DB_DATABASE=loja_api
+```
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+**Importante:** utilize os mesmos nomes de variáveis definidos na configuração do TypeORM do projeto. Não compartilhe o arquivo `.env` com senhas reais.
 
-## Resources
+### Executar a aplicação
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+A API será iniciada na porta configurada no projeto.
 
-## Support
+### Documentação Swagger
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Após iniciar a aplicação, acesse:
 
-## Stay in touch
+```text
+http://localhost:3000/api
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+O Swagger permite visualizar as rotas, consultar os parâmetros, preencher os corpos das requisições e executar chamadas à API.
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 3. Autenticação e controle de acesso
+
+A API utiliza autenticação JWT para identificar os usuários e controlar o acesso aos recursos.
+
+Após realizar o login, o usuário recebe um token que deve ser enviado no cabeçalho das requisições protegidas:
+
+```http
+Authorization: Bearer SEU_TOKEN
+```
+
+### Perfis de acesso
+
+| Perfil | Permissões |
+|---|---|
+| ADMIN | Gerenciar categorias, associar produtos a categorias e executar operações administrativas. |
+| CLIENT | Consultar categorias e produtos, gerenciar os próprios endereços e acessar seus pagamentos e pedidos conforme as regras de negócio. |
+
+### Respostas de autenticação e autorização
+
+| Código HTTP | Significado |
+|---|---|
+| 200 | Requisição realizada com sucesso. |
+| 201 | Recurso criado com sucesso. |
+| 204 | Requisição realizada sem conteúdo de resposta. |
+| 400 | Dados inválidos ou operação não permitida. |
+| 401 | Usuário não autenticado. |
+| 403 | Usuário autenticado, mas sem permissão para realizar a operação. |
+| 404 | Recurso não encontrado. |
+
+---
+
+# 4. Pacote Endereços
+
+## 4.1 Objetivo
+
+Permitir que os clientes cadastrem e gerenciem seus próprios endereços, além de associar um endereço a um pedido.
+
+## 4.2 Histórias de usuário
+
+- **US-E1:** O cliente pode cadastrar um endereço.
+- **US-E2:** O cliente pode consultar seus endereços.
+- **US-E3:** O cliente pode atualizar seus próprios endereços.
+- **US-E4:** O cliente pode excluir seus próprios endereços.
+- **US-E5:** O cliente pode associar um endereço a um pedido.
+
+## 4.3 Regras de negócio
+
+1. Todas as operações de endereço exigem autenticação.
+2. O cliente somente pode consultar os próprios endereços.
+3. O cliente somente pode atualizar os próprios endereços.
+4. O cliente somente pode excluir os próprios endereços.
+5. O `userId` do endereço deve ser obtido a partir do usuário autenticado, e não informado livremente no corpo da requisição.
+6. Para associar um endereço a um pedido, o pedido e o endereço devem pertencer ao mesmo usuário.
+7. Um usuário não pode associar a um pedido um endereço pertencente a outra pessoa.
+
+## 4.4 Rotas
+
+| Método | Rota | Descrição | Autenticação |
+|---|---|---|---|
+| POST | `/addresses` | Cadastrar endereço | JWT |
+| GET | `/addresses` | Listar os próprios endereços | JWT |
+| PUT | `/addresses/:id` | Atualizar endereço | JWT |
+| DELETE | `/addresses/:id` | Excluir endereço | JWT |
+| PATCH | `/orders/:id/address` | Associar endereço ao pedido | JWT |
+
+## 4.5 Exemplos de requisições
+
+**Cadastrar endereço**
+
+```bash
+curl -X POST http://localhost:3000/addresses \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{ ... }'
+```
+
+O corpo deve conter os campos definidos no `CreateAddressDto`.
+
+**Listar endereços**
+
+```bash
+curl -X GET http://localhost:3000/addresses \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+**Atualizar endereço**
+
+```bash
+curl -X PUT http://localhost:3000/addresses/1 \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{ ... }'
+```
+
+O corpo deve conter os campos definidos no DTO de atualização.
+
+**Excluir endereço**
+
+```bash
+curl -X DELETE http://localhost:3000/addresses/1 \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+**Associar endereço a um pedido**
+
+```bash
+curl -X PATCH http://localhost:3000/orders/1/address \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "addressId": 1
+  }'
+```
+
+---
+
+# 5. Pacote Pagamento fake
+
+## 5.1 Objetivo
+
+Implementar um sistema simulado de pagamentos, permitindo criar pagamentos para pedidos, consultar pagamentos, atualizar seus status e excluir registros.
+
+O pacote não realiza transações financeiras reais. Ele simula o fluxo de pagamento e a atualização do estado dos pedidos.
+
+## 5.2 Regras de negócio
+
+1. O cliente somente pode criar pagamentos para seus próprios pedidos.
+2. Somente pedidos com status `OPEN` podem receber pagamentos.
+3. Um pedido não pode possuir mais de um pagamento ativo.
+4. Os pagamentos são criados com status inicial `PENDING`.
+5. Os métodos de pagamento permitidos são `CARD`, `BOLETO` e `PIX`.
+6. Os status permitidos são `PENDING`, `PAID` e `CANCELLED`.
+7. Somente pagamentos com status `PENDING` podem ser atualizados.
+8. Um pagamento `PENDING` pode passar para `PAID` ou `CANCELLED`.
+9. Quando um pagamento passa para `PAID`, o pedido correspondente também passa para `PAID`.
+10. Somente o proprietário do pedido ou um ADMIN pode atualizar o status do pagamento.
+11. Clientes somente podem visualizar seus próprios pagamentos.
+12. Administradores podem visualizar todos os pagamentos.
+13. Somente ADMIN pode excluir pagamentos.
+
+## 5.3 Métodos de pagamento
+
+| Método | Descrição |
+|---|---|
+| CARD | Cartão |
+| BOLETO | Boleto bancário |
+| PIX | Pix |
+
+## 5.4 Status dos pagamentos
+
+| Status | Descrição |
+|---|---|
+| PENDING | Pagamento aguardando confirmação. |
+| PAID | Pagamento confirmado. |
+| CANCELLED | Pagamento cancelado. |
+
+### Fluxo de atualização
+
+```text
+PENDING
+   |
+   |------------------|
+   v                  v
+ PAID              CANCELLED
+   |
+   v
+Pedido passa para PAID
+```
+
+## 5.5 Rotas
+
+| Método | Rota | Descrição | Permissão |
+|---|---|---|---|
+| POST | `/orders/:id/payments` | Criar pagamento para um pedido | JWT |
+| GET | `/payments` | Listar pagamentos | JWT |
+| PATCH | `/payments/:id/status` | Atualizar status do pagamento | JWT |
+| DELETE | `/payments/:id` | Excluir pagamento | ADMIN |
+
+## 5.6 Exemplos de requisições
+
+**Criar pagamento**
+
+```bash
+curl -X POST http://localhost:3000/orders/1/payments \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "method": "PIX"
+  }'
+```
+
+**Listar pagamentos**
+
+```bash
+curl -X GET http://localhost:3000/payments \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+O resultado depende do perfil autenticado:
+
+- CLIENT recebe somente os pagamentos dos próprios pedidos.
+- ADMIN recebe todos os pagamentos.
+
+**Confirmar pagamento**
+
+```bash
+curl -X PATCH http://localhost:3000/payments/1/status \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "PAID"
+  }'
+```
+
+**Cancelar pagamento**
+
+```bash
+curl -X PATCH http://localhost:3000/payments/1/status \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "CANCELLED"
+  }'
+```
+
+**Excluir pagamento**
+
+```bash
+curl -X DELETE http://localhost:3000/payments/1 \
+  -H "Authorization: Bearer TOKEN_ADMIN"
+```
+
+A exclusão está disponível somente para administradores.
+
+---
+
+# 6. Pacote Categorias (Catálogo rico)
+
+## 6.1 Objetivo
+
+Permitir o gerenciamento de categorias de produtos, possibilitando organizar o catálogo da loja e associar produtos às categorias cadastradas.
+
+## 6.2 Histórias de usuário
+
+- **US-C1:** O ADMIN pode realizar o CRUD de categorias.
+- **US-C2:** O CLIENT pode visualizar categorias e produtos.
+- **US-C3:** O ADMIN pode associar um produto a uma categoria.
+- **US-C4:** O CLIENT não pode modificar categorias.
+
+## 6.3 Regras de negócio
+
+1. Somente ADMIN pode criar categorias.
+2. Somente ADMIN pode atualizar categorias.
+3. Somente ADMIN pode excluir categorias.
+4. ADMIN pode associar produtos às categorias.
+5. CLIENT pode consultar as categorias cadastradas.
+6. CLIENT pode consultar os produtos associados às categorias.
+7. CLIENT não pode criar, atualizar ou excluir categorias.
+8. Uma categoria pode possuir vários produtos.
+9. Um produto pode ser associado a uma categoria.
+10. O ID da categoria é gerado automaticamente pelo banco de dados.
+
+## 6.4 Tipos de categoria
+
+Os tipos de categoria utilizados são:
+
+- `CAMISA`
+- `ACTION FIGURE`
+
+## 6.5 Rotas
+
+| Método | Rota | Descrição | Permissão |
+|---|---|---|---|
+| POST | `/categories` | Criar categoria | ADMIN |
+| GET | `/categories` | Listar categorias | JWT |
+| GET | `/categories/:id` | Consultar categoria por ID | JWT |
+| GET | `/categories/:id/products` | Listar produtos de uma categoria | JWT |
+| PUT | `/categories/:id` | Atualizar categoria | ADMIN |
+| DELETE | `/categories/:id` | Excluir categoria | ADMIN |
+| PATCH | `/products/:id/category` | Associar categoria a um produto | ADMIN |
+
+## 6.6 Exemplos de requisições
+
+**Criar categoria**
+
+```bash
+curl -X POST http://localhost:3000/categories \
+  -H "Authorization: Bearer TOKEN_ADMIN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "CAMISA"
+  }'
+```
+
+**Listar categorias**
+
+```bash
+curl -X GET http://localhost:3000/categories \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+**Consultar categoria por ID**
+
+```bash
+curl -X GET http://localhost:3000/categories/1 \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+**Listar produtos de uma categoria**
+
+```bash
+curl -X GET http://localhost:3000/categories/1/products \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+
+**Atualizar categoria**
+
+```bash
+curl -X PUT http://localhost:3000/categories/1 \
+  -H "Authorization: Bearer TOKEN_ADMIN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "ACTION FIGURE"
+  }'
+```
+
+**Excluir categoria**
+
+```bash
+curl -X DELETE http://localhost:3000/categories/1 \
+  -H "Authorization: Bearer TOKEN_ADMIN"
+```
+
+**Associar categoria a um produto**
+
+```bash
+curl -X PATCH http://localhost:3000/products/1/category \
+  -H "Authorization: Bearer TOKEN_ADMIN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "categoryId": 1
+  }'
+```
+
+---
+
+# 7. Documentação Swagger
+
+A documentação interativa da API está disponível por meio do Swagger.
+
+Após iniciar a aplicação, acesse:
+
+```text
+http://localhost:3000/api
+```
+
+O Swagger apresenta:
+
+- Rotas disponíveis.
+- Métodos HTTP.
+- Descrição das operações.
+- Parâmetros de rota.
+- Corpos das requisições.
+- Exemplos e valores permitidos nos DTOs.
+- Respostas HTTP documentadas.
+- Autenticação Bearer JWT.
+
+Para testar rotas protegidas:
+
+1. Realize o login e obtenha um token JWT.
+2. Abra o Swagger.
+3. Clique em **Authorize**.
+4. Informe o token.
+5. Execute a operação desejada.
+
+---
+
+# 8. Estrutura dos módulos
+
+O projeto utiliza a arquitetura modular do NestJS, separando as responsabilidades da aplicação.
+
+```text
+src/
+├── auth/
+├── products/
+├── orders/
+├── addresses/
+├── payments/
+├── categories/
+├── app.module.ts
+└── main.ts
+```
+
+### Responsabilidades
+
+| Módulo | Responsabilidade |
+|---|---|
+| Auth | Autenticação e autorização dos usuários. |
+| Products | Cadastro, consulta, atualização e exclusão de produtos. |
+| Orders | Gerenciamento dos pedidos. |
+| Addresses | Gerenciamento dos endereços dos clientes. |
+| Payments | Simulação e gerenciamento dos pagamentos. |
+| Categories | Gerenciamento das categorias e associação aos produtos. |
+
+Cada módulo utiliza controllers para receber requisições HTTP e services para implementar as regras de negócio. O TypeORM realiza a comunicação com o PostgreSQL por meio das entidades e repositórios.
+
+---
+
+# 9. Testes realizados
+
+Durante o desenvolvimento, foram realizados testes das funcionalidades por meio do Postman.
+
+### Endereços
+
+- Cadastro de endereço.
+- Consulta dos próprios endereços.
+- Atualização de endereço.
+- Exclusão de endereço.
+- Associação de endereço a pedido.
+- Verificação de propriedade entre endereço e pedido.
+
+### Pagamentos
+
+- Criação de pagamento.
+- Listagem de pagamentos.
+- Confirmação de pagamento.
+- Cancelamento de pagamento.
+- Atualização do status do pedido após confirmação.
+- Bloqueio de atualização por usuários sem permissão.
+- Exclusão de pagamento por ADMIN.
+
+### Categorias
+
+- Criação de categoria.
+- Listagem de categorias.
+- Consulta por ID.
+- Atualização de categoria.
+- Exclusão de categoria.
+- Associação de categoria a produto.
+- Listagem de produtos por categoria.
+- Bloqueio das operações administrativas para CLIENT.
+
+---
+
+# 10. Considerações finais
+
+A implementação dos pacotes Endereços, Pagamento fake e Categorias amplia as funcionalidades da API da loja virtual.
+
+O desenvolvimento contempla separação de responsabilidades por módulos, persistência de dados com PostgreSQL e TypeORM, autenticação JWT, controle de permissões por perfil, validação de entradas e documentação das rotas por meio do Swagger.
+
+As funcionalidades foram testadas com requisições HTTP utilizando o Postman, verificando os principais fluxos de operação e as restrições de acesso estabelecidas pelas regras de negócio.
