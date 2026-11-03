@@ -8,13 +8,18 @@ import path from 'path/win32';
 import * as fs from 'fs/promises';
 import { PatchProductDto } from './dto/patch-product.dto';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
+import { Category } from '../categories/category.entity';
+import { AssignCategoryDto } from '../categories/dto/assign-category.dto';
 
 @Injectable()
 export default class ProductService {
 
     constructor(
         @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>
+        private readonly productRepository: Repository<Product>,
+
+        @InjectRepository(Category)
+        private readonly categoryRepository: Repository<Category>
     ) { }
 
     async findAll(query: ListProductsQueryDto): Promise<Product[]> {
@@ -105,6 +110,26 @@ export default class ProductService {
         const product = await this.productRepository.findOne({ where: { id } });
         if (!product) throw new NotFoundException('produto com o id ' + id + ' não encontrado');
         product.imageFilename = filename;
+        return this.productRepository.save(product);
+    }
+
+    async assignCategory(
+        id: number,
+        dto: AssignCategoryDto
+    ): Promise<Product> {
+
+        const product = await this.findById(id);
+
+        const category = await this.categoryRepository.findOne({
+            where: { id: dto.categoryId }
+        });
+
+        if (!category) {
+            throw new NotFoundException('Categoria não encontrada');
+        }
+
+        product.category = category;
+
         return this.productRepository.save(product);
     }
 }

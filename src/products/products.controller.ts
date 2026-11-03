@@ -14,6 +14,7 @@ import { createReadStream, existsSync } from 'fs';
 import type { Response } from 'express';
 import { PatchProductDto } from './dto/patch-product.dto';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
+import { AssignCategoryDto } from '../categories/dto/assign-category.dto';
 
 
 @Controller('products')
@@ -144,5 +145,15 @@ export class ProductsController {
         if (!existsSync(path)) throw new NotFoundException('Imagem não encontrada.');
         createReadStream(path).pipe(res);
 
+    }
+
+    @Patch(':id/category')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN')
+    assignCategory(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: AssignCategoryDto
+    ) {
+        return this.productService.assignCategory(id, dto);
     }
 }

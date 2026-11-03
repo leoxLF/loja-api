@@ -32,7 +32,6 @@ export class OrdersService {
 
     async create(dto: CreateOrderDto, userId: number | null = null): Promise<Order> {
 
-
         return this.dataSource.transaction(async (manager) => {
 
             const order = manager.create(Order, { userId, status: 'OPEN', items: [] });
