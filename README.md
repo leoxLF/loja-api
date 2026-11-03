@@ -58,6 +58,8 @@ DB_PORT=5432
 DB_USERNAME=loja
 DB_PASSWORD=sua_senha
 DB_DATABASE=loja_api
+
+JWT_SECRET=sua_chave_secreta
 ```
 
 **Importante:** utilize os mesmos nomes de variáveis definidos na configuração do TypeORM do projeto. Não compartilhe o arquivo `.env` com senhas reais.
