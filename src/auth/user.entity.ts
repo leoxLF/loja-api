@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "../orders/order.entity";
 
-export type Role = 'ADMIN' | 'CLIENT';
+export type Role = 'ADMIN' | 'CLIENT' | 'MANAGER';
 
 @Entity('users')
 export class User {

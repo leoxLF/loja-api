@@ -58,8 +58,9 @@ export class ProductsController {
     @ApiResponse({ status: 401, description: 'Não autorizado. É necessário realizar autenticação.' })
     @ApiResponse({ status: 404, description: 'Produto não encontrado.' })
     @ApiParam({ name: 'id', description: 'ID do produto que deseja atualizar', example: 1, type: Number })
+    @Roles('ADMIN', 'MANAGER')
     @Put(':id')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     update(@Param('id') id: number, @Body() updateProduct: UpdateProductDto): Promise<ProductDto> {
         return this.productService.update(id, updateProduct);
     }

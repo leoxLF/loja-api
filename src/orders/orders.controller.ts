@@ -5,6 +5,8 @@ import { CreateOrderDto } from './create-order.dto';
 import { SetOrderAddressDto } from './set-order-address.dto';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 interface AuthenticatedRequest extends Request {
     user: {
@@ -35,6 +37,8 @@ export class OrdersController {
     @ApiOperation({ summary: 'Lista todos os pedidos' })
     @ApiResponse({ status: 200, description: 'Lista de pedidos retornada com sucesso.' })
     @Get()
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('ADMIN', 'MANAGER')
     findAll() {
         return this.orderService.findAll();
     }
