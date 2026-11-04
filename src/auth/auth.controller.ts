@@ -1,8 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,5 +29,19 @@ export class AuthController {
     @Post('login')
     login(@Body() dto: LoginDto) {
         return this.authService.login(dto.username, dto.password);
+    }
+
+    @Get('me')
+    @UseGuards(JwtAuthGuard)
+    me(@Req() req: any) {
+        return this.authService.me(req.user.userId);
+    }
+
+    @ApiOperation({ summary: 'Atualiza o access token utilizando um refresh token' })
+    @ApiResponse({ status: 201, description: 'Novo access token gerado com sucesso.' })
+    @ApiResponse({ status: 401, description: 'Refresh token inválido ou expirado.' })
+    @Post('refresh')
+    refresh(@Body() dto: RefreshTokenDto) {
+        return this.authService.refresh(dto.refresh_token);
     }
 }

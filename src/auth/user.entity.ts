@@ -8,18 +8,19 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({unique: true})
+    @Column({ unique: true })
     username: string;
 
-    @Column({unique: true})
+    @Column({ unique: true })
     email: string;
 
     @Column()
     password: string;
 
-    @Column({default: 'CLIENT'})
+    @Column({ default: 'CLIENT' })
     role: Role;
 
-    
+    @Column({ type: 'varchar', nullable: true, select: false })
+    refreshTokenHash: string | null;
 
 }
