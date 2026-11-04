@@ -428,6 +428,27 @@ curl -X PATCH http://localhost:3000/products/1/category \
   }'
 ```
 
+### Diagrama de Entidades — Category e Product
+
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PRODUCT : possui
+
+    CATEGORY {
+        int id PK
+        varchar type
+    }
+
+    PRODUCT {
+        int id PK
+        varchar name
+        numeric price
+        int stock
+        varchar imageFilename
+        int categoryId FK
+    }
+```
+
 ---
 
 # 7. Documentação Swagger
