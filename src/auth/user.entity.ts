@@ -20,4 +20,6 @@ export class User {
     @Column({default: 'CLIENT'})
     role: Role;
 
+    
+
 }

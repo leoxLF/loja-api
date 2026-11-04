@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CatalogModule } from './catalog/catalog.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CategoriesModule } from './categories/categories.module';
     AddressesModule,
     PaymentsModule,
     CategoriesModule,
+    CatalogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
