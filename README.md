@@ -58,6 +58,8 @@ DB_PORT=5432
 DB_USERNAME=loja
 DB_PASSWORD=sua_senha
 DB_DATABASE=loja_api
+
+JWT_SECRET=sua_chave_secreta
 ```
 
 **Importante:** utilize os mesmos nomes de variáveis definidos na configuração do TypeORM do projeto. Não compartilhe o arquivo `.env` com senhas reais.
@@ -424,6 +426,27 @@ curl -X PATCH http://localhost:3000/products/1/category \
   -d '{
     "categoryId": 1
   }'
+```
+
+### Diagrama de Entidades — Category e Product
+
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PRODUCT : possui
+
+    CATEGORY {
+        int id PK
+        varchar type
+    }
+
+    PRODUCT {
+        int id PK
+        varchar name
+        numeric price
+        int stock
+        varchar imageFilename
+        int categoryId FK
+    }
 ```
 
 ---
