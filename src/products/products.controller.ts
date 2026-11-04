@@ -43,6 +43,9 @@ export class ProductsController {
         return this.productService.findAll(query);
     }
 
+
+    
+
     @ApiOperation({ summary: 'Retorna um produto pelo ID', description: 'Retorna um produto específico com base no ID fornecido.' })
     @ApiResponse({ status: 200, description: 'Produto retornado com sucesso.', type: ProductDto })
     @ApiResponse({ status: 404, description: 'Produto não encontrado.' })

@@ -1,4 +1,4 @@
-import {Controller,Post,Body,Get,Param, ParseIntPipe,Patch,Req, UseGuards} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, ParseIntPipe, Patch, Req, UseGuards } from '@nestjs/common';
 
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './create-order.dto';
@@ -34,6 +34,7 @@ export class OrdersController {
         return this.orderService.create(dto, req.user.userId);
     }
 
+
     @ApiOperation({ summary: 'Lista todos os pedidos' })
     @ApiResponse({ status: 200, description: 'Lista de pedidos retornada com sucesso.' })
     @Get()
@@ -41,6 +42,15 @@ export class OrdersController {
     @Roles('ADMIN', 'MANAGER')
     findAll() {
         return this.orderService.findAll();
+    }
+
+
+    @ApiOperation({ summary: 'Lista os pedidos do usuário autenticado' })
+    @ApiResponse({ status: 200, description: 'Pedidos do usuário retornados com sucesso.' })
+    @Get('my')
+    @UseGuards(JwtAuthGuard)
+    findMyOrders(@Req() req: AuthenticatedRequest) {
+        return this.orderService.findByUser(req.user.userId);
     }
 
     @ApiOperation({ summary: 'Retorna um pedido pelo ID' })
@@ -76,4 +86,5 @@ export class OrdersController {
             req.user.userId
         );
     }
+
 }

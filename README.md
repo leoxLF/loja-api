@@ -60,6 +60,9 @@ DB_PASSWORD=sua_senha
 DB_DATABASE=loja_api
 
 JWT_SECRET=sua_chave_secreta
+
+JWT_REFRESH_SECRET=troque-por-um-segredo-grande-refresh
+JWT_REFRESH_EXPIRES_IN=1d
 ```
 
 **Importante:** utilize os mesmos nomes de variáveis definidos na configuração do TypeORM do projeto. Não compartilhe o arquivo `.env` com senhas reais.
