@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ES2023",
-    "types": ["node", "jest"],
+    "types": ["node", "jest","multer", "express"],
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
@@ -20,3 +20,4 @@
     "strictPropertyInitialization": false
   }
 }
+
